@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📝 Calendar Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <div class="header-image">
+      <h1 class="title">📅 My Fancy Notes</h1>
+    </div>
+
+    <div class="container">
+      <div class="header">
+        <h2>Make a Note ✍️</h2>
+        <button id="darkToggle" title="Toggle Dark Mode">🌙</button>
+      </div>
+
+      <div class="form-group">
+        <label for="date" class="floating-label">Select Date</label>
+        <input type="date" id="date" class="fancy-input">
+      </div>
+
+      <textarea id="note" placeholder="Write your note here..."></textarea>
+      <button class="glow-button" onclick="saveNote()">➕ Save Note</button>
+
+      <h3>📖 Notes for Selected Date</h3>
+      <ul id="notesList" class="animated-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
