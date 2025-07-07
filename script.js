@@ -1,43 +1,76 @@
-function saveNote() {
-  const date = document.getElementById("date").value;
-  const note = document.getElementById("note").value.trim();
+const form = document.getElementById('noteForm');
+const noteDate = document.getElementById('noteDate');
+const noteText = document.getElementById('noteText');
+const notesList = document.getElementById('notesList');
 
-  if (!date || !note) {
-    alert("Please select a date and enter a note.");
-    return;
-  }
+let notes = JSON.parse(localStorage.getItem('notes')) || [];
 
-  const notes = JSON.parse(localStorage.getItem("calendarNotes") || "{}");
+// Render existing notes
+notes.forEach(displayNote);
+updateNoteCount();
 
-  if (!notes[date]) {
-    notes[date] = [];
-  }
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
 
-  notes[date].push(note);
-  localStorage.setItem("calendarNotes", JSON.stringify(notes));
+  const date = noteDate.value;
+  const text = noteText.value;
 
-  document.getElementById("note").value = "";
-  loadNotes();
-}
+  if (!date || !text) return;
 
-function loadNotes() {
-  const date = document.getElementById("date").value;
-  const notesList = document.getElementById("notesList");
-  notesList.innerHTML = "";
+  const noteObj = {
+    id: Date.now(),
+    date,
+    text,
+  };
 
-  if (!date) return;
+  notes.unshift(noteObj);
+  localStorage.setItem('notes', JSON.stringify(notes));
 
-  const notes = JSON.parse(localStorage.getItem("calendarNotes") || "{}");
-  const dateNotes = notes[date] || [];
+  displayNote(noteObj);
+  updateNoteCount();
 
-  dateNotes.forEach(note => {
-    const li = document.createElement("li");
-    li.textContent = note;
-    notesList.appendChild(li);
-  });
-}
-
-document.getElementById("date").addEventListener("change", loadNotes);
-document.getElementById("darkToggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
+  noteDate.value = '';
+  noteText.value = '';
 });
+
+function displayNote(noteObj) {
+  const note = document.createElement('div');
+  note.classList.add('note');
+  note.setAttribute('data-id', noteObj.id);
+
+  const dateHeading = document.createElement('h3');
+  dateHeading.innerText = `📅 ${new Date(noteObj.date).toDateString()}`;
+
+  const noteContent = document.createElement('p');
+  noteContent.innerText = noteObj.text;
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.innerText = '🗑️ Delete';
+  deleteBtn.className = 'delete-btn';
+  deleteBtn.onclick = () => deleteNote(noteObj.id);
+
+  note.appendChild(dateHeading);
+  note.appendChild(noteContent);
+  note.appendChild(deleteBtn);
+
+  notesList.prepend(note);
+}
+
+function deleteNote(id) {
+  notes = notes.filter(n => n.id !== id);
+  localStorage.setItem('notes', JSON.stringify(notes));
+
+  document.querySelector(`[data-id="${id}"]`).remove();
+  updateNoteCount();
+}
+
+function updateNoteCount() {
+  let counter = document.getElementById('noteCounter');
+  if (!counter) {
+    counter = document.createElement('div');
+    counter.id = 'noteCounter';
+    counter.style = 'text-align:center;margin-top:10px;color:#333;font-weight:bold;';
+    document.querySelector('.glass-container').appendChild(counter);
+  }
+  counter.innerText = `🗒️ Total Notes: ${notes.length}`;
+}

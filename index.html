@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>📝 Calendar Notes</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notes with Date</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app">
-    <div class="header-image">
-      <h1 class="title">📅 My Fancy Notes</h1>
-    </div>
-
-    <div class="container">
-      <div class="header">
-        <h2>Make a Note ✍️</h2>
-        <button id="darkToggle" title="Toggle Dark Mode">🌙</button>
+  <div class="wrapper">
+    <div class="glass-container">
+      <h1 class="fade-in">📝 Notes with Date</h1>
+      <form id="noteForm" class="slide-up">
+        <input type="date" id="noteDate" required />
+        <textarea id="noteText" placeholder="Write your note here..." required></textarea>
+        <button type="submit">➕ Add Note</button>
+      </form>
+      <div id="notesList" class="fade-in-delayed">
+        <!-- Notes appear here -->
       </div>
-
-      <div class="form-group">
-        <label for="date" class="floating-label">Select Date</label>
-        <input type="date" id="date" class="fancy-input">
-      </div>
-
-      <textarea id="note" placeholder="Write your note here..."></textarea>
-      <button class="glow-button" onclick="saveNote()">➕ Save Note</button>
-
-      <h3>📖 Notes for Selected Date</h3>
-      <ul id="notesList" class="animated-list"></ul>
     </div>
   </div>
 
